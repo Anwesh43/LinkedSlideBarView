@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.slidebarview
  * Created by anweshmishra on 03/09/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.graphics.Canvas
@@ -183,6 +184,14 @@ class SlideBarView(ctx : Context) : View(ctx) {
             slideBar.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : SlideBarView {
+            val view : SlideBarView = SlideBarView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
  }
