@@ -162,4 +162,25 @@ class SlideBarView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SlideBarView) {
+        private val animator : Animator = Animator(view)
+        private val slideBar : SlideBar = SlideBar(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            slideBar.draw(canvas, paint)
+            animator.animate {
+                slideBar.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            slideBar.startUpdating {
+                animator.start()
+            }
+        }
+    }
  }
