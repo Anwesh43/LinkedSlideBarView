@@ -27,7 +27,7 @@ fun Canvas.drawSlideBarNode(i : Int, scale : Float, currI : Int, paint : Paint) 
     paint.color = Color.parseColor("#1976D2")
     drawLine(0f, 0f, gap * scale, 0f, paint)
     if (i == currI) {
-        paint.color = Color.parseColor("#FFD600")
+        paint.color = Color.parseColor("#f44336")
         drawCircle(gap * scale, 0f, gap/10, paint)
     }
     restore()
@@ -115,8 +115,9 @@ class SlideBarView(ctx : Context) : View(ctx) {
         }
 
         fun draw(canvas : Canvas, currI : Int, paint : Paint) {
-            canvas.drawSlideBarNode(i, state.scale, currI, paint)
             next?.draw(canvas, currI, paint)
+            canvas.drawSlideBarNode(i, state.scale, currI, paint)
+
         }
 
         fun update(cb : (Int, Float) -> Unit) {
