@@ -49,7 +49,7 @@ class SlideBarView(ctx : Context) : View(ctx) {
         return true
     }
 
-    data class State(var scale : Float, var prevScale : Float = 0f, var dir : Float = 0f) {
+    data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
             scale += 0.1f * dir
@@ -95,4 +95,47 @@ class SlideBarView(ctx : Context) : View(ctx) {
             }
         }
     }
-}
+
+    data class SBNode(var i : Int, val state : State = State()) {
+        var prev : SBNode? = null
+        var next : SBNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = SBNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, currI : Int, paint : Paint) {
+            canvas.drawSlideBarNode(i, state.scale, currI, paint)
+            next?.draw(canvas, currI, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : SBNode {
+            var curr : SBNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
+        }
+    }
+ }
